@@ -5,7 +5,7 @@ import heroFallback from "@/assets/hero-fallback.jpg";
 const Hero = () => {
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Video Background - can be replaced with actual video */}
+      {/* Video Background */}
       <div className="absolute inset-0 w-full h-full">
         <video
           autoPlay
@@ -15,15 +15,8 @@ const Hero = () => {
           className="w-full h-full object-cover"
           poster={heroFallback}
         >
-          {/* Add your video source here */}
           <source src="/videos/cafe-ambiance.mp4" type="video/mp4" />
         </video>
-        {/* Fallback image when video is not available */}
-        <img 
-          src={heroFallback} 
-          alt="Verdant Brew Cafe Interior"
-          className="w-full h-full object-cover"
-        />
       </div>
       
       {/* Overlay gradient */}
