@@ -1,28 +1,70 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
-const menuItems = [
-  {
-    category: "Signature Brews",
-    items: [
-      { name: "Verdant Espresso", description: "Single-origin Ethiopian coffee with notes of bergamot and wildflowers", price: "$5.50", special: true },
-      { name: "Forest Latte", description: "Smooth espresso with house-made oat milk and a hint of maple", price: "$6.50" },
-      { name: "Garden Pour Over", description: "Precision-brewed Colombian coffee with citrus undertones", price: "$6.00" },
-      { name: "Meadow Cappuccino", description: "Classic cappuccino with microfoam artistry", price: "$5.50" },
-    ]
-  },
-  {
-    category: "Artisan Pastries",
-    items: [
-      { name: "Honeycomb Croissant", description: "Buttery layers with wildflower honey glaze", price: "$4.50", special: true },
-      { name: "Botanical Scone", description: "Lavender and lemon with clotted cream", price: "$4.00" },
-      { name: "Forest Berry Tart", description: "Seasonal berries on almond cream", price: "$6.00" },
-      { name: "Matcha Roll", description: "Green tea sponge with vanilla cream", price: "$5.50" },
-    ]
-  },
-];
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  is_special: boolean;
+}
+
+interface MenuCategory {
+  id: string;
+  category: string;
+  items: MenuItem[];
+}
 
 const Menu = () => {
+  const [menuData, setMenuData] = useState<MenuCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMenuData();
+  }, []);
+
+  const fetchMenuData = async () => {
+    try {
+      const { data: categories, error: catError } = await supabase
+        .from("menu_categories")
+        .select("*")
+        .order("display_order");
+
+      if (catError) throw catError;
+
+      const { data: items, error: itemsError } = await supabase
+        .from("menu_items")
+        .select("*")
+        .order("display_order");
+
+      if (itemsError) throw itemsError;
+
+      const formattedData: MenuCategory[] = categories.map(cat => ({
+        id: cat.id,
+        category: cat.name,
+        items: items.filter(item => item.category_id === cat.id)
+      }));
+
+      setMenuData(formattedData);
+    } catch (error) {
+      console.error("Error fetching menu:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="py-20 md:py-32 px-4 bg-muted/30">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-lg text-muted-foreground">Loading menu...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20 md:py-32 px-4 bg-muted/30">
       <div className="max-w-7xl mx-auto">
@@ -37,7 +79,7 @@ const Menu = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {menuItems.map((category, idx) => (
+          {menuData.map((category, idx) => (
             <Card 
               key={idx}
               className="border-border/50 shadow-sm hover:shadow-md transition-shadow animate-scale-in"
@@ -54,7 +96,7 @@ const Menu = () => {
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-foreground">{item.name}</h3>
-                        {item.special && (
+                        {item.is_special && (
                           <Badge variant="secondary" className="text-xs">
                             Chef's Choice
                           </Badge>
