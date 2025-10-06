@@ -2,7 +2,7 @@ import coffeePour from "@/assets/coffee-pour.jpg";
 
 const About = () => {
   return (
-    <section className="py-20 md:py-32 px-4 bg-background">
+    <section id="about" className="py-20 md:py-32 px-4 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">

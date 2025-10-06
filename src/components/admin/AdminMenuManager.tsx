@@ -146,9 +146,9 @@ const AdminMenuManager = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-display font-bold text-foreground">
+    <div className="space-y-6 p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-2xl md:text-3xl font-display font-bold text-foreground">
           Menu Management
         </h2>
         <Button onClick={handleAddCategory}>

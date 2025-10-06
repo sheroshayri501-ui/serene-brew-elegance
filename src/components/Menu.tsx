@@ -66,7 +66,7 @@ const Menu = () => {
   }
 
   return (
-    <section className="py-20 md:py-32 px-4 bg-muted/30">
+    <section id="menu" className="py-20 md:py-32 px-4 bg-muted/30">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">

@@ -1,12 +1,38 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Clock, Phone, Mail } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate form submission
+    setTimeout(() => {
+      toast({
+        title: "Message sent!",
+        description: "Thank you for contacting us. We'll get back to you soon.",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
-    <section className="py-20 md:py-32 px-4 bg-muted/30">
+    <section id="contact" className="py-20 md:py-32 px-4 bg-muted/30">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -18,9 +44,9 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
           {/* Contact Info */}
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 md:space-y-8 animate-fade-in">
             <Card className="border-border/50">
               <CardContent className="p-6 space-y-6">
                 <div className="flex items-start gap-4">
@@ -78,11 +104,14 @@ const Contact = () => {
               <h3 className="font-display text-2xl font-semibold text-foreground mb-6">
                 Send us a message
               </h3>
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <Input 
                     placeholder="Your Name" 
                     className="bg-background border-border"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
                   />
                 </div>
                 <div>
@@ -90,12 +119,18 @@ const Contact = () => {
                     type="email" 
                     placeholder="Your Email" 
                     className="bg-background border-border"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
                   />
                 </div>
                 <div>
                   <Input 
                     placeholder="Subject" 
                     className="bg-background border-border"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    required
                   />
                 </div>
                 <div>
@@ -103,6 +138,9 @@ const Contact = () => {
                     placeholder="Your Message" 
                     rows={5}
                     className="bg-background border-border resize-none"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    required
                   />
                 </div>
                 <Button 
@@ -110,8 +148,9 @@ const Contact = () => {
                   variant="default"
                   className="w-full"
                   size="lg"
+                  disabled={loading}
                 >
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </CardContent>

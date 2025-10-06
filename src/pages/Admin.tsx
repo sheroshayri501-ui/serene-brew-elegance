@@ -71,8 +71,8 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-muted/30">
       <header className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="font-display text-2xl font-bold text-primary">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h1 className="font-display text-xl sm:text-2xl font-bold text-primary">
             Verdant Brew Admin
           </h1>
           <Button onClick={handleLogout} variant="outline" size="sm">
@@ -82,7 +82,7 @@ const Admin = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto py-8">
         <AdminMenuManager />
       </main>
     </div>
